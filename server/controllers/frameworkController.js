@@ -1,9 +1,18 @@
+// server/controllers/frameworkController.js
 const Framework = require("../models/Framework");
+const Rating = require("../models/Rating");
 
 exports.getAllFrameworks = async (req, res) => {
   try {
-    const frameworks = await Framework.find().select(
-      "name version performanceScore"
+    const { search } = req.query;
+    let query = {};
+
+    if (search) {
+      query = { name: { $regex: search, $options: "i" } };
+    }
+
+    const frameworks = await Framework.find(query).select(
+      "name version performanceScore popularity ecosystemScore"
     );
     res.json(frameworks);
   } catch (error) {
@@ -68,5 +77,53 @@ exports.deleteFramework = async (req, res) => {
     res
       .status(500)
       .json({ message: "Error deleting framework", error: error.message });
+  }
+};
+
+exports.addRating = async (req, res) => {
+  try {
+    const { frameworkId } = req.params;
+    const { user, score, comment } = req.body;
+
+    const framework = await Framework.findById(frameworkId);
+    if (!framework) {
+      return res.status(404).json({ message: "Framework not found" });
+    }
+
+    const rating = new Rating({
+      framework: frameworkId,
+      user,
+      score,
+      comment,
+    });
+
+    await rating.save();
+
+    // Update the framework's average rating
+    const ratings = await Rating.find({ framework: frameworkId });
+    const avgRating =
+      ratings.reduce((sum, r) => sum + r.score, 0) / ratings.length;
+    framework.userRating = avgRating;
+    await framework.save();
+
+    res.status(201).json(rating);
+  } catch (error) {
+    res
+      .status(400)
+      .json({ message: "Error adding rating", error: error.message });
+  }
+};
+
+exports.getFrameworkRatings = async (req, res) => {
+  try {
+    const { frameworkId } = req.params;
+    const ratings = await Rating.find({ framework: frameworkId }).sort(
+      "-createdAt"
+    );
+    res.json(ratings);
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "Error fetching ratings", error: error.message });
   }
 };

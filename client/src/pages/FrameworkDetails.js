@@ -1,89 +1,62 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useParams } from "react-router-dom";
-import axios from "axios";
-import {
-  Typography,
-  Paper,
-  List,
-  ListItem,
-  ListItemText,
-  Chip,
-} from "@material-ui/core";
-import { Rating } from "@material-ui/lab";
+import styled from "styled-components";
+import api from "../services/api";
 import LoadingSpinner from "../components/LoadingSpinner";
-import FadeIn from "../components/FadeIn";
+import ErrorMessage from "../components/ErrorMessage";
+import RatingForm from "../components/RatingForm";
+import RatingsList from "../components/RatingList";
 
-const FrameworkDetails = ({ setSnackbar }) => {
+const DetailsContainer = styled.div`
+  padding: 24px;
+`;
+
+const FrameworkDetails = () => {
   const { id } = useParams();
   const [framework, setFramework] = useState(null);
+  const [ratings, setRatings] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  const fetchFrameworkDetails = useCallback(async () => {
+    try {
+      const [frameworkResponse, ratingsResponse] = await Promise.all([
+        api.get(`/frameworks/${id}`),
+        api.get(`/frameworks/${id}/ratings`),
+      ]);
+      setFramework(frameworkResponse.data);
+      setRatings(ratingsResponse.data);
+      setLoading(false);
+    } catch (err) {
+      setError("Error fetching framework details");
+      setLoading(false);
+    }
+  }, [id]);
 
   useEffect(() => {
-    const fetchFrameworkDetails = async () => {
-      try {
-        const response = await axios.get(`/api/frameworks/${id}`);
-        setFramework(response.data);
-        setLoading(false);
-      } catch (err) {
-        setSnackbar({
-          open: true,
-          message: "Error fetching framework details",
-          severity: "error",
-        });
-        setLoading(false);
-      }
-    };
-
     fetchFrameworkDetails();
-  }, [id, setSnackbar]);
+  }, [fetchFrameworkDetails]);
 
-  if (loading) return <LoadingSpinner message="Loading framework details..." />;
+  const handleRatingAdded = () => {
+    fetchFrameworkDetails();
+  };
+
+  if (loading) return <LoadingSpinner />;
+  if (error) return <ErrorMessage message={error} />;
   if (!framework) return null;
 
   return (
-    <FadeIn>
-      <Paper style={{ padding: "2rem", marginTop: "2rem" }}>
-        <Typography variant="h4" gutterBottom>
-          {framework.name}
-        </Typography>
-        <Chip
-          label={`Version: ${framework.version}`}
-          style={{ marginBottom: "1rem" }}
-        />
-        <Typography variant="body1" paragraph>
-          {framework.description}
-        </Typography>
-        <List>
-          <ListItem>
-            <ListItemText
-              primary="Performance Score"
-              secondary={framework.performanceScore}
-            />
-          </ListItem>
-          <ListItem>
-            <ListItemText
-              primary="Learning Curve"
-              secondary={framework.learningCurve}
-            />
-          </ListItem>
-          <ListItem>
-            <ListItemText
-              primary="Community Support"
-              secondary={<Rating value={framework.communitySupport} readOnly />}
-            />
-          </ListItem>
-          <ListItem>
-            <ListItemText
-              primary="Job Market Demand"
-              secondary={<Rating value={framework.jobMarketDemand} readOnly />}
-            />
-          </ListItem>
-        </List>
-        <Typography variant="body2" color="textSecondary">
-          Last Updated: {new Date(framework.lastUpdated).toLocaleDateString()}
-        </Typography>
-      </Paper>
-    </FadeIn>
+    <DetailsContainer>
+      <h1>{framework.name}</h1>
+      <p>Version: {framework.version}</p>
+      <p>Performance Score: {framework.performanceScore}</p>
+      <p>
+        User Rating:{" "}
+        {framework.userRating ? framework.userRating.toFixed(1) : "N/A"}/5
+      </p>
+      <RatingForm frameworkId={id} onRatingAdded={handleRatingAdded} />
+      <RatingsList ratings={ratings} />
+    </DetailsContainer>
   );
 };
 

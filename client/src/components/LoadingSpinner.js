@@ -1,19 +1,32 @@
+// src/components/LoadingSpinner.js
 import React from "react";
-import { CircularProgress, Typography, Box } from "@material-ui/core";
+import styled, { keyframes } from "styled-components";
 
-const LoadingSpinner = ({ message = "Loading..." }) => (
-  <Box
-    display="flex"
-    flexDirection="column"
-    alignItems="center"
-    justifyContent="center"
-    height="50vh"
-  >
-    <CircularProgress size={60} thickness={4} />
-    <Typography variant="h6" style={{ marginTop: "1rem" }}>
-      {message}
-    </Typography>
-  </Box>
+const spin = keyframes`
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+`;
+
+const SpinnerContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+`;
+
+const Spinner = styled.div`
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid ${({ theme }) => theme.colors.primary};
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: ${spin} 1s linear infinite;
+`;
+
+const LoadingSpinner = () => (
+  <SpinnerContainer>
+    <Spinner />
+  </SpinnerContainer>
 );
 
 export default LoadingSpinner;

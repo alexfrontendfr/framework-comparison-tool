@@ -1,8 +1,10 @@
 import { configureStore } from "@reduxjs/toolkit";
 import frameworksReducer from "./frameworksSlice";
 
-export default configureStore({
+const store = configureStore({
   reducer: {
     frameworks: frameworksReducer,
   },
 });
+
+export default store;

@@ -6,7 +6,7 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
-} from "@material-ui/core";
+} from "@mui/material";
 
 const FeedbackForm = () => {
   const [open, setOpen] = useState(false);
