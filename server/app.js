@@ -10,8 +10,11 @@ const app = express();
 
 app.use(cors());
 app.use(express.json());
+app.use("/api/frameworks", require("./routes/frameworkRoutes"));
 
 console.log("MONGODB_URI:", process.env.MONGODB_URI);
+
+mongoose.set("strictQuery", false);
 
 mongoose
   .connect(process.env.MONGODB_URI, {

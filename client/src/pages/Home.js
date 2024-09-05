@@ -136,23 +136,22 @@ const TestimonialTitle = styled.h2`
 
 const TestimonialCarousel = styled.div`
   display: flex;
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: none;
-  &::-webkit-scrollbar {
-    display: none;
-  }
+  justify-content: center;
+  gap: 2rem;
+  flex-wrap: wrap;
 `;
 
 const TestimonialCard = styled.div`
   background-color: ${({ theme }) => theme.colors.surface};
   padding: 2rem;
   border-radius: 12px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  margin: 0 1rem;
-  flex: 0 0 300px;
-  scroll-snap-align: start;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  max-width: 300px;
+  transition: transform 0.3s ease;
+
+  &:hover {
+    transform: translateY(-5px);
+  }
 `;
 
 const features = [
