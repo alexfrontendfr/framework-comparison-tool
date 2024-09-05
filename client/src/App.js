@@ -12,19 +12,21 @@ import BackToTop from "./components/BackToTop";
 
 function App() {
   return (
-    <ThemeProvider theme={theme}>
-      <GlobalStyle />
-      <ErrorBoundary>
-        <Router>
-          <Header />
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/comparison" element={<Comparison />} />
-          </Routes>
-          <BackToTop />
-        </Router>
-      </ErrorBoundary>
-    </ThemeProvider>
+    <Router basename={process.env.PUBLIC_URL}>
+      <ThemeProvider theme={theme}>
+        <GlobalStyle />
+        <ErrorBoundary>
+          <Router>
+            <Header />
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/comparison" element={<Comparison />} />
+            </Routes>
+            <BackToTop />
+          </Router>
+        </ErrorBoundary>
+      </ThemeProvider>
+    </Router>
   );
 }
 
