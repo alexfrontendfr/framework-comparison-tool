@@ -12,7 +12,7 @@ import BackToTop from "./components/BackToTop";
 
 function App() {
   return (
-    <Router basename={process.env.PUBLIC_URL}>
+    <Router basename={process.env.REACT_APP_BASE_URL}>
       <ThemeProvider theme={theme}>
         <GlobalStyle />
         <ErrorBoundary>

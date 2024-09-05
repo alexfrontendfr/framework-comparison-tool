@@ -1,6 +1,7 @@
 // src/components/LogoTicker.js
 import React from "react";
 import styled, { keyframes } from "styled-components";
+import { assetUrl } from "../utils/assetUrl";
 
 const moveLeft = keyframes`
   0% {
@@ -57,7 +58,7 @@ const LogoTicker = () => {
         {[...frameworks, ...frameworks].map((framework, index) => (
           <LogoWrapper key={index}>
             <img
-              src={`/images/${framework}-logo.png`}
+              src={assetUrl(`/images/${framework}-logo.png`)}
               alt={`${framework} logo`}
             />
           </LogoWrapper>
