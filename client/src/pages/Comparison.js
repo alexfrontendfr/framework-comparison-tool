@@ -188,7 +188,7 @@ const Comparison = () => {
   }
 
   if (status === "failed") {
-    return <ErrorMessage message={error} />;
+    return <div>Error: {error}</div>;
   }
 
   const selectedFrameworksData = frameworks.filter((framework) =>
