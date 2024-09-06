@@ -1,4 +1,3 @@
-// src/globalStyles.js
 import { createGlobalStyle } from "styled-components";
 
 const GlobalStyle = createGlobalStyle`
@@ -11,6 +10,10 @@ const GlobalStyle = createGlobalStyle`
   html {
     font-size: 16px;
     scroll-behavior: smooth;
+
+    @media (max-width: ${({ theme }) => theme.breakpoints.tablet}) {
+      font-size: 14px;
+    }
   }
 
   body {
@@ -19,29 +22,58 @@ const GlobalStyle = createGlobalStyle`
     font-family: ${({ theme }) => theme.fonts.body};
     background-color: ${({ theme }) => theme.colors.background};
     color: ${({ theme }) => theme.colors.text};
-    line-height: 1.6;
+    line-height: ${({ theme }) => theme.lineHeights.body};
   }
 
   h1, h2, h3, h4, h5, h6 {
     font-family: ${({ theme }) => theme.fonts.heading};
     margin-top: 0;
+    line-height: ${({ theme }) => theme.lineHeights.heading};
   }
 
-  ::-webkit-scrollbar {
-    width: 10px;
+  h1 {
+    font-size: ${({ theme }) => theme.fontSizes.xxlarge};
   }
 
-  ::-webkit-scrollbar-track {
-    background: ${({ theme }) => theme.colors.background};
+  h2 {
+    font-size: ${({ theme }) => theme.fontSizes.xlarge};
   }
 
-  ::-webkit-scrollbar-thumb {
-    background: ${({ theme }) => theme.colors.primary};
-    border-radius: 5px;
+  h3 {
+    font-size: ${({ theme }) => theme.fontSizes.large};
   }
 
-  ::-webkit-scrollbar-thumb:hover {
-    background: ${({ theme }) => theme.colors.secondary};
+  p {
+    margin-bottom: ${({ theme }) => theme.space[3]}px;
+  }
+
+  a {
+    color: ${({ theme }) => theme.colors.primary};
+    text-decoration: none;
+    transition: ${({ theme }) => theme.transitions.default};
+
+    &:hover {
+      color: ${({ theme }) => theme.colors.secondary};
+    }
+  }
+
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
+    h1 {
+      font-size: ${({ theme }) => theme.fontSizes.xlarge};
+    }
+
+    h2 {
+      font-size: ${({ theme }) => theme.fontSizes.large};
+    }
+
+    h3 {
+      font-size: ${({ theme }) => theme.fontSizes.medium};
+    }
   }
 `;
 

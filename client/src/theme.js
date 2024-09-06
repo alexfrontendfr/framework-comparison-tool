@@ -35,6 +35,7 @@ const theme = {
     mobile: "480px",
     tablet: "768px",
     desktop: "1024px",
+    largeDesktop: "1200px",
   },
   shadows: {
     small: "0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24)",

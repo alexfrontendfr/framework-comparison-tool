@@ -1,57 +1,81 @@
 import React, { useState } from "react";
-import {
-  Button,
-  TextField,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-} from "@mui/material";
+import styled from "styled-components";
+import { motion } from "framer-motion";
 
-const FeedbackForm = () => {
-  const [open, setOpen] = useState(false);
+const Form = styled.form`
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  max-width: 500px;
+  margin: 0 auto;
+`;
+
+const Input = styled.input`
+  padding: 0.5rem;
+  border: 1px solid ${({ theme }) => theme.colors.primary};
+  border-radius: 4px;
+`;
+
+const Textarea = styled.textarea`
+  padding: 0.5rem;
+  border: 1px solid ${({ theme }) => theme.colors.primary};
+  border-radius: 4px;
+  resize: vertical;
+  min-height: 100px;
+`;
+
+const SubmitButton = styled(motion.button)`
+  padding: 0.5rem 1rem;
+  background-color: ${({ theme }) => theme.colors.primary};
+  color: ${({ theme }) => theme.colors.textLight};
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+`;
+
+const FeedbackForm = ({ onSubmit }) => {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
   const [feedback, setFeedback] = useState("");
 
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
-
-  const handleSubmit = () => {
-    // TODO: Implement feedback submission to your backend
-    console.log("Feedback submitted:", feedback);
-    handleClose();
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    onSubmit({ name, email, feedback });
+    setName("");
+    setEmail("");
+    setFeedback("");
   };
 
   return (
-    <>
-      <Button variant="outlined" color="primary" onClick={handleOpen}>
-        Give Feedback
-      </Button>
-      <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>Provide Feedback</DialogTitle>
-        <DialogContent>
-          <TextField
-            autoFocus
-            margin="dense"
-            id="feedback"
-            label="Your Feedback"
-            type="text"
-            fullWidth
-            multiline
-            rows={4}
-            value={feedback}
-            onChange={(e) => setFeedback(e.target.value)}
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose} color="primary">
-            Cancel
-          </Button>
-          <Button onClick={handleSubmit} color="primary">
-            Submit
-          </Button>
-        </DialogActions>
-      </Dialog>
-    </>
+    <Form onSubmit={handleSubmit}>
+      <Input
+        type="text"
+        placeholder="Your Name"
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+        required
+      />
+      <Input
+        type="email"
+        placeholder="Your Email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        required
+      />
+      <Textarea
+        placeholder="Your Feedback"
+        value={feedback}
+        onChange={(e) => setFeedback(e.target.value)}
+        required
+      />
+      <SubmitButton
+        type="submit"
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.95 }}
+      >
+        Submit Feedback
+      </SubmitButton>
+    </Form>
   );
 };
 

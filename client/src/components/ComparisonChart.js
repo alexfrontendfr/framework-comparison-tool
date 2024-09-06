@@ -1,82 +1,75 @@
-// src/components/ComparisonChart.js
+// src/components/ComparisonChart.js (continued)
 import React from "react";
+import {
+  RadarChart,
+  PolarGrid,
+  PolarAngleAxis,
+  PolarRadiusAxis,
+  Radar,
+  Legend,
+  ResponsiveContainer,
+} from "recharts";
 import styled from "styled-components";
-import { ResponsiveBar } from "@nivo/bar";
 
 const ChartContainer = styled.div`
+  width: 100%;
   height: 400px;
-  margin-top: 2rem;
+  margin-bottom: 2rem;
 `;
 
 const ComparisonChart = ({ frameworks }) => {
-  const data = frameworks.map((framework) => ({
-    framework: framework.name,
-    performance: framework.performanceScore,
-    popularity: framework.popularity,
-    ecosystem: framework.ecosystemScore,
-  }));
+  const data = [
+    {
+      subject: "Performance",
+      A: frameworks[0]?.performanceScore,
+      B: frameworks[1]?.performanceScore,
+    },
+    {
+      subject: "Popularity",
+      A: frameworks[0]?.popularity,
+      B: frameworks[1]?.popularity,
+    },
+    {
+      subject: "Ecosystem",
+      A: frameworks[0]?.ecosystemScore,
+      B: frameworks[1]?.ecosystemScore,
+    },
+    {
+      subject: "Learning Curve",
+      A: frameworks[0]?.learningCurve,
+      B: frameworks[1]?.learningCurve,
+    },
+    {
+      subject: "Community Support",
+      A: frameworks[0]?.communitySupport,
+      B: frameworks[1]?.communitySupport,
+    },
+  ];
 
   return (
     <ChartContainer>
-      <ResponsiveBar
-        data={data}
-        keys={["performance", "popularity", "ecosystem"]}
-        indexBy="framework"
-        margin={{ top: 50, right: 130, bottom: 50, left: 60 }}
-        padding={0.3}
-        valueScale={{ type: "linear" }}
-        indexScale={{ type: "band", round: true }}
-        colors={{ scheme: "nivo" }}
-        borderColor={{ from: "color", modifiers: [["darker", 1.6]] }}
-        axisTop={null}
-        axisRight={null}
-        axisBottom={{
-          tickSize: 5,
-          tickPadding: 5,
-          tickRotation: 0,
-          legend: "Framework",
-          legendPosition: "middle",
-          legendOffset: 32,
-        }}
-        axisLeft={{
-          tickSize: 5,
-          tickPadding: 5,
-          tickRotation: 0,
-          legend: "Score",
-          legendPosition: "middle",
-          legendOffset: -40,
-        }}
-        labelSkipWidth={12}
-        labelSkipHeight={12}
-        labelTextColor={{ from: "color", modifiers: [["darker", 1.6]] }}
-        legends={[
-          {
-            dataFrom: "keys",
-            anchor: "bottom-right",
-            direction: "column",
-            justify: false,
-            translateX: 120,
-            translateY: 0,
-            itemsSpacing: 2,
-            itemWidth: 100,
-            itemHeight: 20,
-            itemDirection: "left-to-right",
-            itemOpacity: 0.85,
-            symbolSize: 20,
-            effects: [
-              {
-                on: "hover",
-                style: {
-                  itemOpacity: 1,
-                },
-              },
-            ],
-          },
-        ]}
-        animate={true}
-        motionStiffness={90}
-        motionDamping={15}
-      />
+      <ResponsiveContainer width="100%" height="100%">
+        <RadarChart cx="50%" cy="50%" outerRadius="80%" data={data}>
+          <PolarGrid />
+          <PolarAngleAxis dataKey="subject" />
+          <PolarRadiusAxis angle={30} domain={[0, 100]} />
+          <Radar
+            name={frameworks[0]?.name}
+            dataKey="A"
+            stroke="#8884d8"
+            fill="#8884d8"
+            fillOpacity={0.6}
+          />
+          <Radar
+            name={frameworks[1]?.name}
+            dataKey="B"
+            stroke="#82ca9d"
+            fill="#82ca9d"
+            fillOpacity={0.6}
+          />
+          <Legend />
+        </RadarChart>
+      </ResponsiveContainer>
     </ChartContainer>
   );
 };

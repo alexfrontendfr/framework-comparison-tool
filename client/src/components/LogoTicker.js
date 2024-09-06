@@ -50,7 +50,6 @@ const frameworks = [
   "nuxtjs",
   "gatsby",
 ];
-
 const LogoTicker = () => {
   return (
     <TickerContainer>
@@ -60,6 +59,10 @@ const LogoTicker = () => {
             <img
               src={assetUrl(`/images/${framework}-logo.png`)}
               alt={`${framework} logo`}
+              onError={(e) => {
+                e.target.onerror = null;
+                e.target.src = assetUrl("/images/placeholder-logo.png");
+              }}
             />
           </LogoWrapper>
         ))}

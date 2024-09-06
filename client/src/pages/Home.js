@@ -1,4 +1,3 @@
-// src/pages/Home.js
 import React from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
@@ -23,6 +22,7 @@ const Hero = styled.section`
   align-items: center;
   justify-content: space-between;
   margin-bottom: 4rem;
+  padding-top: 6rem; // Increased top padding
   position: relative;
   overflow: hidden;
 
@@ -33,15 +33,18 @@ const Hero = styled.section`
     left: 0;
     right: 0;
     bottom: 0;
-    background: url("/images/hero-bg.svg") no-repeat center center;
-    background-size: cover;
-    opacity: 0.1;
+    background: linear-gradient(
+      135deg,
+      ${({ theme }) => theme.colors.primary}10,
+      ${({ theme }) => theme.colors.secondary}10
+    );
     z-index: -1;
   }
 
   @media (max-width: ${({ theme }) => theme.breakpoints.tablet}) {
     flex-direction: column;
     text-align: center;
+    padding-top: 4rem;
   }
 `;
 
@@ -59,12 +62,20 @@ const HeroTitle = styled(motion.h1)`
   );
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.tablet}) {
+    font-size: 2.5rem;
+  }
 `;
 
 const HeroDescription = styled(motion.p)`
   font-size: 1.2rem;
   margin-bottom: 2rem;
   color: ${({ theme }) => theme.colors.text};
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.tablet}) {
+    font-size: 1rem;
+  }
 `;
 
 const CTAButton = styled(motion(Link))`
@@ -95,6 +106,15 @@ const CTAButton = styled(motion(Link))`
   }
 `;
 
+const HeroImage = styled(motion.img)`
+  max-width: 50%;
+  height: auto;
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.tablet}) {
+    max-width: 80%;
+    margin-top: 2rem;
+  }
+`;
 const FeatureSection = styled.section`
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -225,6 +245,13 @@ const Home = () => {
               Start Comparing <FaArrowRight />
             </CTAButton>
           </HeroContent>
+          <HeroImage
+            src="/images/hero-image.svg"
+            alt="Framework comparison illustration"
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5, delay: 0.6 }}
+          />
         </Hero>
 
         <LogoTicker />

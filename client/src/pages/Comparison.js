@@ -1,8 +1,8 @@
+// src/pages/Comparison.js
 import React, { useEffect, useState, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchFrameworks } from "../redux/frameworksSlice";
 import styled from "styled-components";
-import theme from "../theme";
 import { motion, AnimatePresence } from "framer-motion";
 import Tippy from "@tippyjs/react";
 import "tippy.js/dist/tippy.css";
@@ -16,8 +16,9 @@ import ComparisonOverlay from "../components/ComparisonOverlay";
 import ErrorBoundary from "../components/ErrorBoundary";
 import LoadingSpinner from "../components/LoadingSpinner";
 import SelectionLimit from "../components/SelectionLimit";
+import ComparisonCard from "../components/ComparisonCard";
 
-const PageContainer = styled.div`
+const PageContainer = styled(motion.div)`
   background-color: ${({ theme }) => theme.colors.background};
   min-height: 100vh;
   padding: 2rem;
@@ -35,7 +36,7 @@ const ContentContainer = styled.div`
   }
 `;
 
-const Sidebar = styled.aside`
+const Sidebar = styled(motion.aside)`
   background-color: ${({ theme }) => theme.colors.surface};
   padding: 1.5rem;
   border-radius: 8px;
@@ -46,7 +47,7 @@ const Sidebar = styled.aside`
   }
 `;
 
-const MainContent = styled.main`
+const MainContent = styled(motion.main)`
   background-color: ${({ theme }) => theme.colors.surface};
   padding: 1.5rem;
   border-radius: 8px;
@@ -104,6 +105,20 @@ const InfoIcon = styled(FaInfoCircle)`
   color: ${({ theme }) => theme.colors.primary};
   margin-left: 0.5rem;
   cursor: help;
+`;
+
+const ErrorMessage = styled.div`
+  background-color: ${({ theme }) => theme.colors.error};
+  color: white;
+  padding: 1rem;
+  border-radius: 4px;
+  margin-bottom: 1rem;
+`;
+
+const ComparisonContainer = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1rem;
 `;
 
 const Comparison = () => {
@@ -183,23 +198,19 @@ const Comparison = () => {
     },
   ];
 
-  if (status === "loading") {
-    return <LoadingSpinner />;
-  }
-
-  if (status === "failed") {
-    return <div>Error: {error}</div>;
-  }
-
-  const selectedFrameworksData = frameworks.filter((framework) =>
-    selectedFrameworks.includes(framework.id)
-  );
-
   return (
     <ErrorBoundary>
-      <PageContainer>
+      <PageContainer
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.5 }}
+      >
         <ContentContainer>
-          <Sidebar>
+          <Sidebar
+            initial={{ x: -20, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+          >
             <SearchContainer>
               <SearchIcon />
               <SearchInput
@@ -216,47 +227,70 @@ const Comparison = () => {
               onToggleFramework={handleFrameworkToggle}
             />
           </Sidebar>
-          <MainContent>
-            <SelectionLimit current={selectedFrameworks.length} max={2} />
-            {selectedFrameworks.length === 2 && (
-              <CompareButton
-                className="compare-button"
-                onClick={handleCompare}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                Compare Selected Frameworks
-                <Tippy content="Click to compare the selected frameworks">
-                  <span>
-                    <InfoIcon />
-                  </span>
-                </Tippy>
-              </CompareButton>
+          <MainContent
+            initial={{ x: 20, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            transition={{ duration: 0.5, delay: 0.4 }}
+          >
+            {status === "loading" && <LoadingSpinner />}
+            {status === "failed" && <ErrorMessage>Error: {error}</ErrorMessage>}
+            {status === "succeeded" && (
+              <>
+                <SelectionLimit current={selectedFrameworks.length} max={2} />
+                {selectedFrameworks.length === 2 && (
+                  <CompareButton
+                    className="compare-button"
+                    onClick={handleCompare}
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                  >
+                    Compare Selected Frameworks
+                  </CompareButton>
+                )}
+                <ComparisonContainer>
+                  {selectedFrameworks.map((id) => (
+                    <ComparisonCard
+                      key={id}
+                      framework={frameworks.find((f) => f.id === id)}
+                    />
+                  ))}
+                </ComparisonContainer>
+                <FrameworkList
+                  frameworks={filteredFrameworks}
+                  selectedFrameworks={selectedFrameworks}
+                  onToggleFramework={handleFrameworkToggle}
+                />
+                <AnimatePresence>
+                  {showComparison && selectedFrameworks.length === 2 && (
+                    <motion.div
+                      initial={{ opacity: 0, height: 0 }}
+                      animate={{ opacity: 1, height: "auto" }}
+                      exit={{ opacity: 0, height: 0 }}
+                      transition={{ duration: 0.3 }}
+                    >
+                      <ComparisonChart
+                        frameworks={selectedFrameworks.map((id) =>
+                          frameworks.find((f) => f.id === id)
+                        )}
+                      />
+                      <ComparisonTable
+                        frameworks={selectedFrameworks.map((id) =>
+                          frameworks.find((f) => f.id === id)
+                        )}
+                      />
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </>
             )}
-            <FrameworkList
-              frameworks={filteredFrameworks}
-              selectedFrameworks={selectedFrameworks}
-              onToggleFramework={handleFrameworkToggle}
-            />
-            <AnimatePresence>
-              {showComparison && selectedFrameworks.length === 2 && (
-                <motion.div
-                  initial={{ opacity: 0, height: 0 }}
-                  animate={{ opacity: 1, height: "auto" }}
-                  exit={{ opacity: 0, height: 0 }}
-                  transition={{ duration: 0.3 }}
-                >
-                  <ComparisonChart frameworks={selectedFrameworksData} />
-                  <ComparisonTable frameworks={selectedFrameworksData} />
-                </motion.div>
-              )}
-            </AnimatePresence>
           </MainContent>
         </ContentContainer>
         <ComparisonOverlay
           isOpen={showComparison}
           onClose={handleCloseComparison}
-          frameworks={selectedFrameworksData}
+          frameworks={selectedFrameworks.map((id) =>
+            frameworks.find((f) => f.id === id)
+          )}
         />
         <Joyride
           steps={steps}
@@ -271,20 +305,6 @@ const Comparison = () => {
               textColor: theme.colors.text,
               backgroundColor: theme.colors.surface,
               arrowColor: theme.colors.surface,
-            },
-            tooltip: {
-              fontSize: "14px",
-              padding: "15px",
-            },
-            buttonNext: {
-              backgroundColor: theme.colors.primary,
-              fontSize: "14px",
-              padding: "8px 15px",
-            },
-            buttonBack: {
-              color: theme.colors.primary,
-              fontSize: "14px",
-              marginRight: "10px",
             },
           }}
         />

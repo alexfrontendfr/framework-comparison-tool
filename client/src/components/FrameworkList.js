@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { motion, AnimatePresence } from "framer-motion";
+import { FrameworkCardSkeleton } from "./SkeletonLoader";
 
 const ListContainer = styled.div`
   display: grid;
@@ -39,9 +40,20 @@ const FrameworkList = ({
   frameworks,
   selectedFrameworks,
   onToggleFramework,
+  loading,
 }) => {
+  if (loading) {
+    return (
+      <ListContainer>
+        {[...Array(6)].map((_, index) => (
+          <FrameworkCardSkeleton key={index} />
+        ))}
+      </ListContainer>
+    );
+  }
+
   return (
-    <ListContainer className="framework-list">
+    <ListContainer>
       <AnimatePresence>
         {frameworks.map((framework) => (
           <FrameworkCard
