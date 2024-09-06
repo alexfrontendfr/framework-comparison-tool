@@ -17,6 +17,7 @@ import ErrorBoundary from "../components/ErrorBoundary";
 import LoadingSpinner from "../components/LoadingSpinner";
 import SelectionLimit from "../components/SelectionLimit";
 import ComparisonCard from "../components/ComparisonCard";
+import api from "../services/api";
 
 const PageContainer = styled(motion.div)`
   background-color: ${({ theme }) => theme.colors.background};
@@ -134,7 +135,17 @@ const Comparison = () => {
   const [runTour, setRunTour] = useState(true);
 
   useEffect(() => {
-    dispatch(fetchFrameworks());
+    const fetchFrameworksData = async () => {
+      try {
+        const response = await api.get("/frameworks");
+        dispatch(fetchFrameworks(response.data));
+      } catch (error) {
+        console.error("Error fetching frameworks:", error);
+        dispatch(fetchFrameworksFailure("Failed to fetch frameworks"));
+      }
+    };
+
+    fetchFrameworksData();
   }, [dispatch]);
 
   useEffect(() => {

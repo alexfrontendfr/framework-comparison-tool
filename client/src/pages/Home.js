@@ -246,7 +246,7 @@ const Home = () => {
             </CTAButton>
           </HeroContent>
           <HeroImage
-            src="/images/hero-image.svg"
+            src={`${process.env.PUBLIC_URL}/client/public/images/hero-image.svg`}
             alt="Framework comparison illustration"
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}

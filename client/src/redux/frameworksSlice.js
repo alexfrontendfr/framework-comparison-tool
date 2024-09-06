@@ -25,7 +25,16 @@ const frameworksSlice = createSlice({
     status: "idle",
     error: null,
   },
-  reducers: {},
+  reducers: {
+    fetchFrameworks: (state, action) => {
+      state.status = "succeeded";
+      state.frameworks = action.payload;
+    },
+    fetchFrameworksFailure: (state, action) => {
+      state.status = "failed";
+      state.error = action.payload;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchFrameworks.pending, (state) => {
