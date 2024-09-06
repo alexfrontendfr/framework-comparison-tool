@@ -1,4 +1,3 @@
-// src/components/FrameworkList.js
 import React from "react";
 import styled from "styled-components";
 import { motion, AnimatePresence } from "framer-motion";
@@ -90,8 +89,14 @@ const FrameworkList = ({
             transition={{ duration: 0.3 }}
           >
             <FrameworkLogo
-              src={framework.logo}
+              src={`${
+                process.env.PUBLIC_URL
+              }/images/${framework.name.toLowerCase()}-logo.png`}
               alt={`${framework.name} logo`}
+              onError={(e) => {
+                e.target.onerror = null;
+                e.target.src = `${process.env.PUBLIC_URL}/images/placeholder-logo.png`;
+              }}
             />
             <FrameworkInfo>
               <FrameworkName>{framework.name}</FrameworkName>

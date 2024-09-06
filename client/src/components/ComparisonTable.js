@@ -1,5 +1,3 @@
-// ComparisonTable.js
-
 import React from "react";
 import styled from "styled-components";
 
@@ -26,6 +24,8 @@ const ComparisonTable = ({ frameworks }) => {
     "name",
     "version",
     "performanceScore",
+    "popularity",
+    "ecosystemScore",
     "learningCurve",
     "communitySupport",
     "documentation",
@@ -44,7 +44,7 @@ const ComparisonTable = ({ frameworks }) => {
       <tbody>
         {features.map((feature) => (
           <tr key={feature}>
-            <Td>{feature}</Td>
+            <Td>{feature.charAt(0).toUpperCase() + feature.slice(1)}</Td>
             {frameworks.map((framework) => (
               <Td key={framework.id}>{framework[feature]}</Td>
             ))}

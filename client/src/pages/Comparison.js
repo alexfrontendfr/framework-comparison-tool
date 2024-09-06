@@ -2,7 +2,7 @@ import React, { useEffect, useState, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchFrameworks } from "../redux/frameworksSlice";
 import styled from "styled-components";
-import motion from "framer-motion";
+import { motion } from "framer-motion";
 import Joyride, { STATUS } from "react-joyride";
 import { FaSearch } from "react-icons/fa";
 import FeaturedFrameworks from "../components/FeaturedFrameworks";

@@ -23,7 +23,7 @@ const Hero = styled.section`
   align-items: center;
   justify-content: space-between;
   margin-bottom: 4rem;
-  padding-top: 6rem;
+  padding: 6rem 2rem; // Add horizontal padding
   position: relative;
   overflow: hidden;
 
@@ -47,7 +47,7 @@ const Hero = styled.section`
   @media (max-width: ${({ theme }) => theme.breakpoints.tablet}) {
     flex-direction: column;
     text-align: center;
-    padding-top: 4rem;
+    padding: 4rem 2rem; // Adjust padding for mobile
   }
 `;
 
