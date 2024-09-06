@@ -21,7 +21,7 @@ const ErrorMessage = styled.p`
 class ErrorBoundary extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { hasError: false, error: null, errorInfo: null };
+    this.state = { hasError: false };
   }
 
   static getDerivedStateFromError(error) {
@@ -29,8 +29,7 @@ class ErrorBoundary extends React.Component {
   }
 
   componentDidCatch(error, errorInfo) {
-    this.setState({ error, errorInfo });
-    console.error("ErrorBoundary caught an error:", error, errorInfo);
+    console.log(error, errorInfo);
   }
 
   render() {
