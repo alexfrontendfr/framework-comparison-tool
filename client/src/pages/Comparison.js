@@ -3,7 +3,6 @@ import { useSelector, useDispatch } from "react-redux";
 import { fetchFrameworks } from "../redux/frameworksSlice";
 import styled from "styled-components";
 import { motion, AnimatePresence } from "framer-motion";
-// import Tippy from "@tippyjs/react";
 import "tippy.js/dist/tippy.css";
 import Joyride, { STATUS } from "react-joyride";
 import { FaSearch } from "react-icons/fa";
@@ -125,6 +124,7 @@ const Comparison = () => {
   const [selectedFrameworks, setSelectedFrameworks] = useState([]);
   const [showComparison, setShowComparison] = useState(false);
   const [runTour, setRunTour] = useState(true);
+  const [localError, setLocalError] = useState(null);
 
   useEffect(() => {
     const fetchFrameworksData = async () => {
@@ -133,6 +133,7 @@ const Comparison = () => {
         dispatch(fetchFrameworks(response.data));
       } catch (error) {
         console.error("Error fetching frameworks:", error);
+        setLocalError(error.message || "Failed to fetch frameworks");
       }
     };
 
@@ -140,7 +141,9 @@ const Comparison = () => {
   }, [dispatch]);
 
   useEffect(() => {
-    setFilteredFrameworks(frameworks);
+    if (frameworks.length > 0) {
+      setFilteredFrameworks(frameworks);
+    }
   }, [frameworks]);
 
   const handleSearch = useCallback(
@@ -236,8 +239,10 @@ const Comparison = () => {
             transition={{ duration: 0.5, delay: 0.4 }}
           >
             {status === "loading" && <LoadingSpinner />}
-            {status === "failed" && <ErrorMessage>Error: {error}</ErrorMessage>}
-            {status === "succeeded" && (
+            {(status === "failed" || localError) && (
+              <ErrorMessage>Error: {error || localError}</ErrorMessage>
+            )}
+            {status === "succeeded" && frameworks.length > 0 && (
               <>
                 <SelectionLimit current={selectedFrameworks.length} max={2} />
                 {selectedFrameworks.length === 2 && (
