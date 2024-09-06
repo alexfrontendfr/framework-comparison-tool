@@ -1,5 +1,6 @@
+// src/App.js
 import React from "react";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { ThemeProvider } from "styled-components";
 import theme from "./theme";
 import GlobalStyle from "./globalStyles";
@@ -14,11 +15,11 @@ function App() {
       <GlobalStyle />
       <Router>
         <Header />
-        <Switch>
-          <Route exact path="/" component={Home} />
-          <Route path="/comparison" component={Comparison} />
-          <Route path="/framework/:id" component={FrameworkDetails} />
-        </Switch>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/comparison" element={<Comparison />} />
+          <Route path="/framework/:id" element={<FrameworkDetails />} />
+        </Routes>
       </Router>
     </ThemeProvider>
   );

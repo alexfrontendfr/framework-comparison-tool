@@ -2,7 +2,7 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchFrameworks } from "../redux/frameworksSlice";
-import styled from "styled-components";
+import styled, { ThemeProvider, useTheme } from "styled-components";
 import { motion, AnimatePresence } from "framer-motion";
 import Tippy from "@tippyjs/react";
 import "tippy.js/dist/tippy.css";
@@ -122,6 +122,7 @@ const ComparisonContainer = styled.div`
 `;
 
 const Comparison = () => {
+  const theme = useTheme();
   const dispatch = useDispatch();
   const { frameworks, status, error } = useSelector(
     (state) => state.frameworks
