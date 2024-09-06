@@ -1,13 +1,10 @@
 {
   "files": {
-    "main.css": "https://alexfrontendfr.github.io/framework-comparison-tool/static/css/main.260d2690.css",
-    "main.js": "https://alexfrontendfr.github.io/framework-comparison-tool/static/js/main.2e63be8d.js",
+    "main.js": "https://alexfrontendfr.github.io/framework-comparison-tool/static/js/main.6261b0d8.js",
     "index.html": "https://alexfrontendfr.github.io/framework-comparison-tool/index.html",
-    "main.260d2690.css.map": "https://alexfrontendfr.github.io/framework-comparison-tool/static/css/main.260d2690.css.map",
-    "main.2e63be8d.js.map": "https://alexfrontendfr.github.io/framework-comparison-tool/static/js/main.2e63be8d.js.map"
+    "main.6261b0d8.js.map": "https://alexfrontendfr.github.io/framework-comparison-tool/static/js/main.6261b0d8.js.map"
   },
   "entrypoints": [
-    "static/css/main.260d2690.css",
-    "static/js/main.2e63be8d.js"
+    "static/js/main.6261b0d8.js"
   ]
 }
