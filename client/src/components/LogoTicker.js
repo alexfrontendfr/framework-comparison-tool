@@ -1,9 +1,13 @@
-import React, { useMemo } from "react";
+import React from "react";
 import styled, { keyframes } from "styled-components";
 
 const moveLeft = keyframes`
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
 `;
 
 const TickerContainer = styled.div`
@@ -46,26 +50,24 @@ const frameworks = [
 ];
 
 const LogoTicker = () => {
-  const tickerContent = useMemo(() => {
-    return [...frameworks, ...frameworks].map((framework, index) => (
-      <LogoWrapper key={index}>
-        <img
-          src={`${process.env.PUBLIC_URL}/images/${framework}-logo.png`}
-          alt={`${framework} logo`}
-          onError={(e) => {
-            e.target.onerror = null;
-            e.target.src = `${process.env.PUBLIC_URL}/images/placeholder-logo.png`;
-          }}
-        />
-      </LogoWrapper>
-    ));
-  }, []);
-
   return (
     <TickerContainer>
-      <TickerContent>{tickerContent}</TickerContent>
+      <TickerContent>
+        {[...frameworks, ...frameworks].map((framework, index) => (
+          <LogoWrapper key={index}>
+            <img
+              src={`${process.env.PUBLIC_URL}/images/${framework}-logo.png`}
+              alt={`${framework} logo`}
+              onError={(e) => {
+                e.target.onerror = null;
+                e.target.src = `${process.env.PUBLIC_URL}/images/placeholder-logo.png`;
+              }}
+            />
+          </LogoWrapper>
+        ))}
+      </TickerContent>
     </TickerContainer>
   );
 };
 
-export default React.memo(LogoTicker);
+export default LogoTicker;

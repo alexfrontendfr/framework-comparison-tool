@@ -12,19 +12,36 @@ const ChartContainer = styled.div`
 `;
 
 const ComparisonChart = ({ frameworks }) => {
-  const data = frameworks.map((framework) => ({
-    framework: framework.name,
-    performance: framework.performanceScore,
-    popularity: framework.popularity,
-    ecosystem: framework.ecosystemScore,
-  }));
+  const data = [
+    {
+      metric: "Performance",
+      ...frameworks.reduce(
+        (acc, fw) => ({ ...acc, [fw.name]: fw.performanceScore }),
+        {}
+      ),
+    },
+    {
+      metric: "Popularity",
+      ...frameworks.reduce(
+        (acc, fw) => ({ ...acc, [fw.name]: fw.popularity }),
+        {}
+      ),
+    },
+    {
+      metric: "Ecosystem",
+      ...frameworks.reduce(
+        (acc, fw) => ({ ...acc, [fw.name]: fw.ecosystemScore }),
+        {}
+      ),
+    },
+  ];
 
   return (
     <ChartContainer>
       <ResponsiveBar
         data={data}
-        keys={["performance", "popularity", "ecosystem"]}
-        indexBy="framework"
+        keys={frameworks.map((fw) => fw.name)}
+        indexBy="metric"
         margin={{ top: 50, right: 130, bottom: 50, left: 60 }}
         padding={0.3}
         valueScale={{ type: "linear" }}
@@ -37,7 +54,7 @@ const ComparisonChart = ({ frameworks }) => {
           tickSize: 5,
           tickPadding: 5,
           tickRotation: 0,
-          legend: "Framework",
+          legend: "Metric",
           legendPosition: "middle",
           legendOffset: 32,
         }}

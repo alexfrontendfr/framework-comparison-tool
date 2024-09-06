@@ -40,6 +40,8 @@ const Hero = styled.section`
       ${({ theme }) => theme.colors.secondary}10
     );
     z-index: -1;
+    filter: blur(10px);
+    transform: scale(1.1);
   }
 
   @media (max-width: ${({ theme }) => theme.breakpoints.tablet}) {
@@ -63,6 +65,7 @@ const HeroTitle = styled(motion.h1)`
   );
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
 
   @media (max-width: ${({ theme }) => theme.breakpoints.tablet}) {
     font-size: 2.5rem;
@@ -110,6 +113,7 @@ const CTAButton = styled(motion(Link))`
 const HeroImage = styled(motion.img)`
   max-width: 50%;
   height: auto;
+  filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.1));
 
   @media (max-width: ${({ theme }) => theme.breakpoints.tablet}) {
     max-width: 80%;

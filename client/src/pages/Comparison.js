@@ -2,8 +2,7 @@ import React, { useEffect, useState, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchFrameworks } from "../redux/frameworksSlice";
 import styled from "styled-components";
-import { motion, AnimatePresence } from "framer-motion";
-import "tippy.js/dist/tippy.css";
+import motion from "framer-motion";
 import Joyride, { STATUS } from "react-joyride";
 import { FaSearch } from "react-icons/fa";
 import FeaturedFrameworks from "../components/FeaturedFrameworks";
@@ -39,7 +38,7 @@ const Sidebar = styled(motion.aside)`
   background-color: ${({ theme }) => theme.colors.surface};
   padding: 1.5rem;
   border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 
   @media (max-width: ${({ theme }) => theme.breakpoints.tablet}) {
     margin-bottom: 1rem;
@@ -50,7 +49,7 @@ const MainContent = styled(motion.main)`
   background-color: ${({ theme }) => theme.colors.surface};
   padding: 1.5rem;
   border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 `;
 
 const SearchContainer = styled.div`
@@ -245,50 +244,45 @@ const Comparison = () => {
             {status === "succeeded" && frameworks.length > 0 && (
               <>
                 <SelectionLimit current={selectedFrameworks.length} max={2} />
-                {selectedFrameworks.length === 2 && (
-                  <CompareButton
-                    className="compare-button"
-                    onClick={handleCompare}
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                  >
-                    Compare Selected Frameworks
-                  </CompareButton>
+                {selectedFrameworks.length > 0 && (
+                  <>
+                    <ComparisonContainer>
+                      {selectedFrameworks.map((id) => (
+                        <ComparisonCard
+                          key={id}
+                          framework={frameworks.find((f) => f.id === id)}
+                        />
+                      ))}
+                    </ComparisonContainer>
+                    {selectedFrameworks.length === 2 && (
+                      <>
+                        <CompareButton
+                          className="compare-button"
+                          onClick={handleCompare}
+                          whileHover={{ scale: 1.05 }}
+                          whileTap={{ scale: 0.95 }}
+                        >
+                          Compare Selected Frameworks
+                        </CompareButton>
+                        <ComparisonChart
+                          frameworks={selectedFrameworks.map((id) =>
+                            frameworks.find((f) => f.id === id)
+                          )}
+                        />
+                        <ComparisonTable
+                          frameworks={selectedFrameworks.map((id) =>
+                            frameworks.find((f) => f.id === id)
+                          )}
+                        />
+                      </>
+                    )}
+                  </>
                 )}
-                <ComparisonContainer>
-                  {selectedFrameworks.map((id) => (
-                    <ComparisonCard
-                      key={id}
-                      framework={frameworks.find((f) => f.id === id)}
-                    />
-                  ))}
-                </ComparisonContainer>
                 <FrameworkList
                   frameworks={filteredFrameworks}
                   selectedFrameworks={selectedFrameworks}
                   onToggleFramework={handleFrameworkToggle}
                 />
-                <AnimatePresence>
-                  {showComparison && selectedFrameworks.length === 2 && (
-                    <motion.div
-                      initial={{ opacity: 0, height: 0 }}
-                      animate={{ opacity: 1, height: "auto" }}
-                      exit={{ opacity: 0, height: 0 }}
-                      transition={{ duration: 0.3 }}
-                    >
-                      <ComparisonChart
-                        frameworks={selectedFrameworks.map((id) =>
-                          frameworks.find((f) => f.id === id)
-                        )}
-                      />
-                      <ComparisonTable
-                        frameworks={selectedFrameworks.map((id) =>
-                          frameworks.find((f) => f.id === id)
-                        )}
-                      />
-                    </motion.div>
-                  )}
-                </AnimatePresence>
               </>
             )}
           </MainContent>

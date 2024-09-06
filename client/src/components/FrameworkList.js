@@ -1,64 +1,86 @@
+// src/components/FrameworkList.js
 import React from "react";
 import styled from "styled-components";
 import { motion, AnimatePresence } from "framer-motion";
-import { FrameworkCardSkeleton } from "./SkeletonLoader";
+import { FaCheck } from "react-icons/fa";
 
 const ListContainer = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  gap: 1rem;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
 `;
 
 const FrameworkCard = styled(motion.div)`
-  background-color: ${({ theme }) => theme.colors.surface};
-  border: 2px solid
-    ${({ theme, selected }) =>
-      selected ? theme.colors.primary : "transparent"};
-  border-radius: 8px;
-  padding: 1rem;
+  background: linear-gradient(
+    135deg,
+    ${({ theme }) => theme.colors.surface},
+    ${({ theme }) => theme.colors.background}
+  );
+  backdrop-filter: blur(10px);
+  border-radius: 12px;
+  padding: 1.5rem;
   cursor: pointer;
-  transition: all 0.2s ease-in-out;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
 
   &:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
   }
 `;
 
-const FrameworkName = styled.h3`
-  font-size: 1.1rem;
-  margin: 0 0 0.5rem 0;
+const FrameworkLogo = styled.img`
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  margin-right: 1rem;
+  object-fit: cover;
 `;
 
-const FrameworkDescription = styled.p`
+const FrameworkInfo = styled.div`
+  flex: 1;
+`;
+
+const FrameworkName = styled.h3`
+  font-size: 1.2rem;
+  margin: 0 0 0.5rem 0;
+  color: ${({ theme }) => theme.colors.text};
+`;
+
+const FrameworkScore = styled.p`
   font-size: 0.9rem;
-  color: ${({ theme }) => theme.colors.text}80;
   margin: 0;
+  color: ${({ theme }) => theme.colors.text}80;
+`;
+
+const SelectionIndicator = styled(motion.div)`
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  background-color: ${({ theme }) => theme.colors.primary};
+  color: ${({ theme }) => theme.colors.textLight};
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 const FrameworkList = ({
   frameworks,
   selectedFrameworks,
   onToggleFramework,
-  loading,
 }) => {
-  if (loading) {
-    return (
-      <ListContainer>
-        {[...Array(6)].map((_, index) => (
-          <FrameworkCardSkeleton key={index} />
-        ))}
-      </ListContainer>
-    );
-  }
-
   return (
-    <ListContainer>
+    <ListContainer className="framework-list">
       <AnimatePresence>
         {frameworks.map((framework) => (
           <FrameworkCard
             key={framework.id}
-            selected={selectedFrameworks.includes(framework.id)}
             onClick={() => onToggleFramework(framework.id)}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
@@ -67,14 +89,31 @@ const FrameworkList = ({
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.3 }}
           >
-            <FrameworkName>{framework.name}</FrameworkName>
-            <FrameworkDescription>
-              Performance: {framework.performanceScore}
-              <br />
-              Popularity: {framework.popularity}
-              <br />
-              Ecosystem: {framework.ecosystemScore}
-            </FrameworkDescription>
+            <FrameworkLogo
+              src={framework.logo}
+              alt={`${framework.name} logo`}
+            />
+            <FrameworkInfo>
+              <FrameworkName>{framework.name}</FrameworkName>
+              <FrameworkScore>
+                Performance: {framework.performanceScore}
+              </FrameworkScore>
+              <FrameworkScore>
+                Popularity: {framework.popularity}
+              </FrameworkScore>
+              <FrameworkScore>
+                Ecosystem: {framework.ecosystemScore}
+              </FrameworkScore>
+            </FrameworkInfo>
+            {selectedFrameworks.includes(framework.id) && (
+              <SelectionIndicator
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                exit={{ scale: 0 }}
+              >
+                <FaCheck />
+              </SelectionIndicator>
+            )}
           </FrameworkCard>
         ))}
       </AnimatePresence>

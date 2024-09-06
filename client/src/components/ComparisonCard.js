@@ -1,11 +1,8 @@
-// src/components/ComparisonCard.js
 import React from "react";
 import styled from "styled-components";
-import { motion } from "framer-motion";
-import { ComparisonCardSkeleton } from "./SkeletonLoader";
 import InfoTooltip from "./InfoTooltip";
 
-const Card = styled(motion.div)`
+const Card = styled.div`
   background-color: ${({ theme }) => theme.colors.surface};
   border-radius: 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -37,17 +34,9 @@ const FeatureValue = styled.span`
   color: ${({ theme }) => theme.colors.primary};
 `;
 
-const ComparisonCard = ({ framework, loading }) => {
-  if (loading) {
-    return <ComparisonCardSkeleton />;
-  }
-
+const ComparisonCard = ({ framework }) => {
   return (
-    <Card
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.3 }}
-    >
+    <Card>
       <Title>{framework.name}</Title>
       <FeatureList>
         <FeatureItem>
