@@ -129,7 +129,12 @@ const Comparison = () => {
     const fetchFrameworksData = async () => {
       try {
         const response = await api.get("/frameworks");
-        dispatch(fetchFrameworks(response.data));
+        // Ensure each framework has a unique id
+        const frameworksWithIds = response.data.map((framework, index) => ({
+          ...framework,
+          id: framework.id || `framework-${index}`,
+        }));
+        dispatch(fetchFrameworks(frameworksWithIds));
       } catch (error) {
         console.error("Error fetching frameworks:", error);
         setLocalError(error.message || "Failed to fetch frameworks");

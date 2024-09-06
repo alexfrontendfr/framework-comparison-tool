@@ -6,7 +6,10 @@ export const fetchFrameworks = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await api.get("/frameworks");
-      return response.data;
+      return response.data.map((framework, index) => ({
+        ...framework,
+        id: framework.id || `framework-${index}`,
+      }));
     } catch (error) {
       return rejectWithValue(error.response?.data || error.message);
     }

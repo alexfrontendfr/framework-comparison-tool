@@ -114,7 +114,16 @@ const FrameworkList = ({
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.3 }}
           >
-            <FrameworkLogo />
+            <FrameworkLogo
+              src={`${
+                process.env.PUBLIC_URL
+              }/images/${framework.name.toLowerCase()}-logo.png`}
+              alt={`${framework.name} logo`}
+              onError={(e) => {
+                e.target.onerror = null;
+                e.target.src = `${process.env.PUBLIC_URL}/images/placeholder-logo.png`;
+              }}
+            />
             <FrameworkInfo>
               <FrameworkName>{framework.name}</FrameworkName>
               <FrameworkScore>
