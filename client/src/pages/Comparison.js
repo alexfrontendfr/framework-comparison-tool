@@ -1,13 +1,12 @@
-// src/pages/Comparison.js
 import React, { useEffect, useState, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchFrameworks } from "../redux/frameworksSlice";
-import styled, { ThemeProvider, useTheme } from "styled-components";
+import styled from "styled-components";
 import { motion, AnimatePresence } from "framer-motion";
-import Tippy from "@tippyjs/react";
+// import Tippy from "@tippyjs/react";
 import "tippy.js/dist/tippy.css";
 import Joyride, { STATUS } from "react-joyride";
-import { FaSearch, FaInfoCircle } from "react-icons/fa";
+import { FaSearch } from "react-icons/fa";
 import FeaturedFrameworks from "../components/FeaturedFrameworks";
 import FrameworkList from "../components/FrameworkList";
 import ComparisonChart from "../components/ComparisonChart";
@@ -102,12 +101,6 @@ const CompareButton = styled(motion.button)`
   }
 `;
 
-const InfoIcon = styled(FaInfoCircle)`
-  color: ${({ theme }) => theme.colors.primary};
-  margin-left: 0.5rem;
-  cursor: help;
-`;
-
 const ErrorMessage = styled.div`
   background-color: ${({ theme }) => theme.colors.error};
   color: white;
@@ -123,7 +116,6 @@ const ComparisonContainer = styled.div`
 `;
 
 const Comparison = () => {
-  const theme = useTheme();
   const dispatch = useDispatch();
   const { frameworks, status, error } = useSelector(
     (state) => state.frameworks
@@ -141,7 +133,6 @@ const Comparison = () => {
         dispatch(fetchFrameworks(response.data));
       } catch (error) {
         console.error("Error fetching frameworks:", error);
-        dispatch(fetchFrameworksFailure("Failed to fetch frameworks"));
       }
     };
 
@@ -313,10 +304,10 @@ const Comparison = () => {
           styles={{
             options: {
               zIndex: 10000,
-              primaryColor: theme.colors.primary,
-              textColor: theme.colors.text,
-              backgroundColor: theme.colors.surface,
-              arrowColor: theme.colors.surface,
+              primaryColor: "#3498db",
+              textColor: "#2c3e50",
+              backgroundColor: "#ffffff",
+              arrowColor: "#ffffff",
             },
           }}
         />

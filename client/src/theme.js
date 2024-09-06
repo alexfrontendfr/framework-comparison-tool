@@ -1,15 +1,6 @@
-const theme = {
-  colors: {
-    primary: "#3498db",
-    secondary: "#2ecc71",
-    accent: "#e74c3c",
-    background: "#f9f9f9",
-    surface: "#ffffff",
-    text: "#2c3e50",
-    textLight: "#ecf0f1",
-    error: "#e74c3c",
-    success: "#2ecc71",
-  },
+// src/theme.js
+
+const baseTheme = {
   fonts: {
     body: "'Roboto', sans-serif",
     heading: "'Poppins', sans-serif",
@@ -47,4 +38,34 @@ const theme = {
   },
 };
 
-export default theme;
+export const lightTheme = {
+  ...baseTheme,
+  colors: {
+    primary: "#3498db",
+    secondary: "#2ecc71",
+    accent: "#e74c3c",
+    background: "#f9f9f9",
+    surface: "#ffffff",
+    text: "#2c3e50",
+    textLight: "#ecf0f1",
+    error: "#e74c3c",
+    success: "#2ecc71",
+  },
+};
+
+export const darkTheme = {
+  ...baseTheme,
+  colors: {
+    primary: "#2980b9",
+    secondary: "#27ae60",
+    accent: "#c0392b",
+    background: "#2c3e50",
+    surface: "#34495e",
+    text: "#ecf0f1",
+    textLight: "#bdc3c7",
+    error: "#e74c3c",
+    success: "#2ecc71",
+  },
+};
+
+export default lightTheme;

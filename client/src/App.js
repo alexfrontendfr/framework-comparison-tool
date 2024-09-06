@@ -1,19 +1,24 @@
 // src/App.js
-import React from "react";
+import React, { useContext } from "react";
 import { HashRouter as Router, Routes, Route } from "react-router-dom";
-import { ThemeProvider } from "styled-components";
-import theme from "./theme";
+import { ThemeProvider as StyledThemeProvider } from "styled-components";
+import { ThemeProvider, ThemeContext } from "./contexts/ThemeContext";
+import { lightTheme, darkTheme } from "./theme";
 import GlobalStyle from "./globalStyles";
 import Header from "./components/Header";
 import Home from "./pages/Home";
 import Comparison from "./pages/Comparison";
 import FrameworkDetails from "./pages/FrameworkDetails";
 import ErrorBoundary from "./components/ErrorBoundary";
+import BackToTop from "./components/BackToTop";
 
-function App() {
+function ThemedApp() {
+  const { isDarkMode } = useContext(ThemeContext);
+  const theme = isDarkMode ? darkTheme : lightTheme;
+
   return (
-    <ThemeProvider theme={theme}>
-      <GlobalStyle />
+    <StyledThemeProvider theme={theme}>
+      <GlobalStyle theme={theme} />
       <Router>
         <ErrorBoundary>
           <Header />
@@ -22,8 +27,17 @@ function App() {
             <Route path="/comparison" element={<Comparison />} />
             <Route path="/framework/:id" element={<FrameworkDetails />} />
           </Routes>
+          <BackToTop />
         </ErrorBoundary>
       </Router>
+    </StyledThemeProvider>
+  );
+}
+
+function App() {
+  return (
+    <ThemeProvider>
+      <ThemedApp />
     </ThemeProvider>
   );
 }

@@ -1,8 +1,6 @@
 {
   "name": "framework-comparison-tool",
-  "homepage": "https://alexfrontendfr.github.io/framework-comparison-tool",
   "version": "1.0.0",
-  "main": "index.js",
   "scripts": {
     "start": "node server/app.js",
     "server": "nodemon server/app.js",
@@ -12,10 +10,6 @@
     "predeploy": "cd client && npm run build",
     "deploy": "gh-pages -d client/build"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "description": "",
   "dependencies": {
     "@reduxjs/toolkit": "^2.2.7",
     "cors": "^2.8.5",

@@ -1,4 +1,3 @@
-// src/redux/frameworksSlice.js
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import api from "../services/api";
 
@@ -7,7 +6,6 @@ export const fetchFrameworks = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await api.get("/frameworks");
-      // Ensure each framework has a unique id
       return response.data.map((framework, index) => ({
         ...framework,
         id: framework.id || `framework-${index}`,
@@ -25,21 +23,11 @@ const frameworksSlice = createSlice({
     status: "idle",
     error: null,
   },
-  reducers: {
-    fetchFrameworks: (state, action) => {
-      state.status = "succeeded";
-      state.frameworks = action.payload;
-    },
-    fetchFrameworksFailure: (state, action) => {
-      state.status = "failed";
-      state.error = action.payload;
-    },
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(fetchFrameworks.pending, (state) => {
         state.status = "loading";
-        state.error = null;
       })
       .addCase(fetchFrameworks.fulfilled, (state, action) => {
         state.status = "succeeded";

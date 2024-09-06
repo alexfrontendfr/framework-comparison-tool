@@ -1,7 +1,8 @@
 import axios from "axios";
+import { API_BASE_URL } from "../config";
 
 const api = axios.create({
-  baseURL: "https://framework-comparison-tool-backend.onrender.com/api",
+  baseURL: API_BASE_URL,
 });
 
 export default api;

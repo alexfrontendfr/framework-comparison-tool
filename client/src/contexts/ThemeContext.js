@@ -7,7 +7,7 @@ export const ThemeProvider = ({ children }) => {
 
   useEffect(() => {
     const savedMode = localStorage.getItem("darkMode");
-    if (savedMode) {
+    if (savedMode !== null) {
       setIsDarkMode(JSON.parse(savedMode));
     }
   }, []);

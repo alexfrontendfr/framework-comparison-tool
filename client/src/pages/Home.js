@@ -1,3 +1,4 @@
+// src/pages/Home.js
 import React from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
@@ -22,7 +23,7 @@ const Hero = styled.section`
   align-items: center;
   justify-content: space-between;
   margin-bottom: 4rem;
-  padding-top: 6rem; // Increased top padding
+  padding-top: 6rem;
   position: relative;
   overflow: hidden;
 
@@ -115,6 +116,7 @@ const HeroImage = styled(motion.img)`
     margin-top: 2rem;
   }
 `;
+
 const FeatureSection = styled.section`
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -246,7 +248,7 @@ const Home = () => {
             </CTAButton>
           </HeroContent>
           <HeroImage
-            src={`${process.env.PUBLIC_URL}/client/public/images/hero-image.svg`}
+            src={`${process.env.PUBLIC_URL}/images/hero-image.svg`}
             alt="Framework comparison illustration"
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
