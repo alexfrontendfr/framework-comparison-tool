@@ -1,3 +1,4 @@
+// server/app.js
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
@@ -6,11 +7,14 @@ const { MONGODB_URI } = require("./config");
 
 const app = express();
 
-app.use(cors());
+app.use(
+  cors({
+    origin: "https://alexfrontendfr.github.io",
+  })
+);
 app.use(express.json());
-app.use(express.static(path.join(__dirname, "../client/build")));
 
-mongoose.set("strictQuery", false); // Add this line to address the deprecation warning
+mongoose.set("strictQuery", false);
 
 mongoose
   .connect(MONGODB_URI, {
@@ -20,11 +24,17 @@ mongoose
   .then(() => console.log("Connected to MongoDB"))
   .catch((err) => console.error("Error connecting to MongoDB:", err));
 
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+// API routes
+app.use("/api/frameworks", require("./routes/frameworkRoutes"));
+
+// Serve static files from the React app
+app.use(express.static(path.join(__dirname, "../client/build")));
 
 // The "catchall" handler: for any request that doesn't
 // match one above, send back React's index.html file.
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "../client/build/index.html"));
 });
+
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
