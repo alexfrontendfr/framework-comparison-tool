@@ -9,11 +9,11 @@ import FeaturedFrameworks from "../components/FeaturedFrameworks";
 import FrameworkList from "../components/FrameworkList";
 import ComparisonChart from "../components/ComparisonChart";
 import ComparisonTable from "../components/ComparisonTable";
-import ComparisonOverlay from "../components/ComparisonOverlay";
 import ErrorBoundary from "../components/ErrorBoundary";
 import LoadingSpinner from "../components/LoadingSpinner";
 import SelectionLimit from "../components/SelectionLimit";
 import ComparisonCard from "../components/ComparisonCard";
+import RatingForm from "../components/RatingForm";
 import api from "../services/api";
 
 const PageContainer = styled(motion.div)`
@@ -78,27 +78,6 @@ const SearchIcon = styled(FaSearch)`
   color: ${({ theme }) => theme.colors.primary};
 `;
 
-const CompareButton = styled(motion.button)`
-  background-color: ${({ theme }) => theme.colors.primary};
-  color: white;
-  border: none;
-  padding: 0.75rem 1.5rem;
-  border-radius: 4px;
-  font-size: 1rem;
-  cursor: pointer;
-  margin-bottom: 1.5rem;
-  transition: background-color 0.3s ease;
-
-  &:hover {
-    background-color: ${({ theme }) => theme.colors.secondary};
-  }
-
-  &:disabled {
-    background-color: #ccc;
-    cursor: not-allowed;
-  }
-`;
-
 const ErrorMessage = styled.div`
   background-color: ${({ theme }) => theme.colors.error};
   color: white;
@@ -121,7 +100,6 @@ const Comparison = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredFrameworks, setFilteredFrameworks] = useState([]);
   const [selectedFrameworks, setSelectedFrameworks] = useState([]);
-  const [showComparison, setShowComparison] = useState(false);
   const [runTour, setRunTour] = useState(true);
   const [localError, setLocalError] = useState(null);
 
@@ -168,18 +146,22 @@ const Comparison = () => {
         return prev.filter((id) => id !== frameworkId);
       } else if (prev.length < 2) {
         return [...prev, frameworkId];
+      } else {
+        // If two frameworks are already selected, replace the first one
+        return [prev[1], frameworkId];
       }
-      return prev;
     });
   }, []);
 
-  const handleCompare = useCallback(() => {
-    setShowComparison(true);
-  }, []);
-
-  const handleCloseComparison = useCallback(() => {
-    setShowComparison(false);
-  }, []);
+  const handleRatingSubmit = async (rating) => {
+    try {
+      await api.post("/ratings", rating);
+      // Optionally, you can update the UI to show a success message
+    } catch (error) {
+      console.error("Error submitting rating:", error);
+      // Optionally, you can update the UI to show an error message
+    }
+  };
 
   const handleJoyrideCallback = (data) => {
     const { status } = data;
@@ -261,14 +243,6 @@ const Comparison = () => {
                     </ComparisonContainer>
                     {selectedFrameworks.length === 2 && (
                       <>
-                        <CompareButton
-                          className="compare-button"
-                          onClick={handleCompare}
-                          whileHover={{ scale: 1.05 }}
-                          whileTap={{ scale: 0.95 }}
-                        >
-                          Compare Selected Frameworks
-                        </CompareButton>
                         <ComparisonChart
                           frameworks={selectedFrameworks.map((id) =>
                             frameworks.find((f) => f.id === id)
@@ -279,6 +253,7 @@ const Comparison = () => {
                             frameworks.find((f) => f.id === id)
                           )}
                         />
+                        <RatingForm onSubmit={handleRatingSubmit} />
                       </>
                     )}
                   </>
@@ -292,13 +267,6 @@ const Comparison = () => {
             )}
           </MainContent>
         </ContentContainer>
-        <ComparisonOverlay
-          isOpen={showComparison}
-          onClose={handleCloseComparison}
-          frameworks={selectedFrameworks.map((id) =>
-            frameworks.find((f) => f.id === id)
-          )}
-        />
         <Joyride
           steps={steps}
           run={runTour}

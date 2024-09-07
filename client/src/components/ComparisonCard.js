@@ -46,6 +46,15 @@ const FeatureName = styled.span`
 const FeatureValue = styled.span`
   color: ${({ theme }) => theme.colors.primary};
 `;
+const FrameworkInfo = styled.div`
+  margin-top: 1rem;
+  text-align: left;
+  width: 100%;
+`;
+
+const InfoItem = styled.p`
+  margin: 0.5rem 0;
+`;
 
 const ComparisonCard = ({ framework }) => {
   return (
@@ -98,6 +107,20 @@ const ComparisonCard = ({ framework }) => {
           <FeatureValue>{framework.ecosystemScore}</FeatureValue>
         </FeatureItem>
       </FeatureList>
+      <FrameworkInfo>
+        <InfoItem>
+          <strong>Version:</strong> {framework.version}
+        </InfoItem>
+        <InfoItem>
+          <strong>Learning Curve:</strong> {framework.learningCurve}
+        </InfoItem>
+        <InfoItem>
+          <strong>Community Support:</strong> {framework.communitySupport}
+        </InfoItem>
+        <InfoItem>
+          <strong>Documentation:</strong> {framework.documentation}
+        </InfoItem>
+      </FrameworkInfo>
     </Card>
   );
 };
